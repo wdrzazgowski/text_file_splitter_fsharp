@@ -11,8 +11,8 @@ open System.Collections.Generic
     
 
 
-(*
-let rec writeFile (lines: list<string>) (count: int) = 
+
+(*let rec writeFile (lines: list<string>) (count: int) = 
     match lines with
     | [] -> printf "Koniec."
     | first::rest ->
@@ -26,25 +26,26 @@ let rec writeFile (lines: list<string>) (count: int) =
         writeFile rest (1 + count)
 *)
 
+let writeStringArrayToFile (lines: list<string>) (outputFileName: string) =
+    use sw = new System.IO.StreamWriter(outputFileName)
+    lines |> Seq.iter(sw.WriteLine)
+    sw.Close()
 
+let readFile filePath =
+    File.ReadAllLines filePath
 [<EntryPoint>]
 let main argv =
     let inputFilePath = argv.[0]
-    printfn "Reading content of %s file" inputFilePath
-    let lines = File.ReadAllLines inputFilePath
+    let outputFilePath = argv.[1]
 
+    printfn "Reading content of %s file" inputFilePath
+    let lines = readFile inputFilePath
     printfn "Line count: %i" lines.Length
 
-    type StringList = list<string>
+    printfn "Writing file %s" outputFilePath
+    
+    let lineList = lines |> List.ofArray
+    writeStringArrayToFile lineList outputFilePath |> ignore
 
-    initialValue: StringList list
-    let initialValue = []
-    let count = 1
-    let action (count, listSoFar) x = 
-        
-
-    //let count = 0
-    //writeFile (lines |> List.ofArray) count
-    //lines |> Seq.iter( fun x -> printfn "%s" x)
     0 // return an integer exit code
 
